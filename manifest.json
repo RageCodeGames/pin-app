@@ -1,0 +1,28 @@
+{
+  "name": "Pin Verbindungs App",
+  "short_name": "Pin App",
+  "description": "App zum Durchgehen von Pin-Verbindungen",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#2196F3",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAQhJREFUWEftlzEOgkAQRYcSEhM9gZ7AG+gN9AZ6A72B3kBvoDfQG3gCPYE01BYkJhYm/mQTDLqwsOyuViaTfOZ/mZ0ZwcxLzJwPBdgDh6EDlMAeOPYBKIEdsOsDsAd2XQCXIQArgDOw6gI4AyvgBJz7ABTAFrgAhz4Ae2ALXIFTF0ANrIErcO0DUABr4Abc+gCUwAa49wHcgQ1w+wugAnbAowvg2QdQAjvg1QXw7gMogT3w6QL49AH8tPwbQNU/gEWbB0bg/qfZdol/WzJCR2tma7omxBRY6phpmxBTYKFjom1CTIGZjom3CTEF5jom2SbEFJjpmGybEHNgqmOKbULMgYmOqbYJrW/yCy90YjAhMWTiAAAAAElFTkSuQmCC",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAQhJREFUWEftlzEOgkAQRYcSEhM9gZ7AG+gN9AZ6A72B3kBvoDfQG3gCPYE01BYkJhYm/mQTDLqwsOyuViaTfOZ/mZ0ZwcxLzJwPBdgDh6EDlMAeOPYBKIEdsOsDsAd2XQCXIQArgDOw6gI4AyvgBJz7ABTAFrgAhz4Ae2ALXIFTF0ANrIErcO0DUABr4Abc+gCUwAa49wHcgQ1w+wugAnbAowvg2QdQAjvg1QXw7gMogT3w6QL49AH8tPwbQNU/gEWbB0bg/qfZdol/WzJCR2tma7omxBRY6phpmxBTYKFjom1CTIGZjom3CTEF5jom2SbEFJjpmGybEHNgqmOKbULMgYmOqbYJrW/yCy90YjAhMWTiAAAAAElFTkSuQmCC",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAQhJREFUWEftlzEOgkAQRYcSEhM9gZ7AG+gN9AZ6A72B3kBvoDfQG3gCPYE01BYkJhYm/mQTDLqwsOyuViaTfOZ/mZ0ZwcxLzJwPBdgDh6EDlMAeOPYBKIEdsOsDsAd2XQCXIQArgDOw6gI4AyvgBJz7ABTAFrgAhz4Ae2ALXIFTF0ANrIErcO0DUABr4Abc+gCUwAa49wHcgQ1w+wugAnbAowvg2QdQAjvg1QXw7gMogT3w6QL49AH8tPwbQNU/gEWbB0bg/qfZdol/WzJCR2tma7omxBRY6phpmxBTYKFjom1CTIGZjom3CTEF5jom2SbEFJjpmGybEHNgqmOKbULMgYmOqbYJrW/yCy90YjAhMWTiAAAAAElFTkSuQmCC",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

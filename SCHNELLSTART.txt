@@ -1,0 +1,70 @@
+═══════════════════════════════════════════════════
+    SCHNELLSTART - PWA auf GitHub Pages hosten
+═══════════════════════════════════════════════════
+
+📋 CHECKLISTE - Folge diesen 5 Schritten:
+
+□ 1. GitHub Account erstellen (falls noch nicht vorhanden)
+     → https://github.com → "Sign up"
+
+□ 2. Neues Repository erstellen
+     → Klick auf "+" oben rechts → "New repository"
+     → Name: pin-app (oder eigener Name)
+     → ✅ Public
+     → ❌ KEIN README hinzufügen
+     → "Create repository"
+
+□ 3. Dateien hochladen
+     → "uploading an existing file" klicken
+     → Alle 5 Dateien reinziehen:
+       • index.html
+       • manifest.json
+       • sw.js
+       • README.md
+       • beispiel.csv
+     → "Commit changes"
+
+□ 4. GitHub Pages aktivieren
+     → Settings (oben im Repository)
+     → Pages (links im Menü)
+     → Source: Branch "main", Folder "/ (root)"
+     → Save
+     → ⏳ 1-2 Minuten warten
+
+□ 5. App öffnen! 🎉
+     → https://DEIN-USERNAME.github.io/pin-app/
+     → (Ersetze DEIN-USERNAME mit deinem GitHub Namen)
+
+═══════════════════════════════════════════════════
+
+📱 ALS APP INSTALLIEREN:
+
+Android (Chrome):
+  1. Link öffnen in Chrome
+  2. Menü (⋮) → "Zum Startbildschirm hinzufügen"
+  3. Fertig! ✅
+
+iPhone (Safari):
+  1. Link öffnen in Safari
+  2. Teilen-Symbol → "Zum Home-Bildschirm"
+  3. Fertig! ✅
+
+═══════════════════════════════════════════════════
+
+❓ PROBLEME?
+
+• 404 Error? → Warte 2-3 Minuten nach Aktivierung
+• App lädt nicht? → Repository muss "Public" sein
+• Keine Installation möglich? → Einmal online öffnen
+
+═══════════════════════════════════════════════════
+
+💡 TIPP: 
+Speichere deinen Link als Lesezeichen oder teile ihn per 
+WhatsApp/E-Mail, um ihn überall zu haben!
+
+═══════════════════════════════════════════════════
+
+Mehr Details? → Siehe GITHUB_ANLEITUNG.md
+
+Viel Erfolg! 🚀
