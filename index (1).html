@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Pin Verbindungs App</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        #startScreen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        #startScreen h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            width: 300px;
+            max-width: 90%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 20px 30px;
+            background: white;
+            color: #667eea;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+        }
+
+        .file-info {
+            color: white;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        #appScreen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #stepHeader {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #mainContent {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .pin-display {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        .pin-display:active {
+            transform: scale(0.98);
+        }
+
+        .pin-label {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .pin-value {
+            font-size: 5em;
+            font-weight: 700;
+            color: #667eea;
+            line-height: 1;
+            word-break: keep-all;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #controls {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: space-around;
+        }
+
+        button {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+
+        #backBtn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        #backBtn:active {
+            background: #45a049;
+            transform: scale(0.95);
+        }
+
+        #resetBtn {
+            background: #FF9800;
+            color: white;
+            position: relative;
+        }
+
+        #resetBtn:active {
+            background: #F57C00;
+        }
+
+        #resetBtn.holding {
+            background: #F44336;
+        }
+
+        #resetProgress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #F44336;
+            width: 0;
+            transition: width 0.1s linear;
+            border-radius: 0 0 12px 12px;
+        }
+
+        #homeBtn {
+            background: #2196F3;
+            color: white;
+        }
+
+        #homeBtn:active {
+            background: #1976D2;
+            transform: scale(0.95);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-confirm {
+            background: #F44336;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .pin-value {
+                font-size: 2.5em;
+            }
+
+            #stepHeader {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+
+            .pin-label {
+                font-size: 1em;
+            }
+
+            #controls {
+                flex-direction: column;
+            }
+
+            button {
+                font-size: 1em;
+            }
+
+            #mainContent {
+                flex-direction: column;
+            }
+
+            .pin-display {
+                min-height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pin-value {
+                font-size: 2em;
+            }
+
+            .pin-display {
+                padding: 20px;
+                min-height: 100px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .pin-value {
+                font-size: 2em;
+            }
+
+            #mainContent {
+                padding: 10px;
+            }
+
+            .pin-display {
+                padding: 15px;
+            }
+        }
+
+        /* Landscape mode on mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .pin-value {
+                font-size: 1.8em;
+            }
+
+            #stepHeader {
+                padding: 10px;
+                font-size: 1em;
+            }
+
+            .pin-label {
+                font-size: 0.9em;
+                margin-bottom: 10px;
+            }
+
+            #mainContent {
+                padding: 5px;
+                flex-direction: row;
+            }
+
+            .pin-display {
+                padding: 10px;
+            }
+
+            #controls {
+                padding: 10px;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="startScreen">
+        <h1>📌 Pin Verbindungs App</h1>
+        <div class="file-input-wrapper">
+            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+            <label for="fileInput" class="file-input-label">
+                📁 Datei auswählen
+            </label>
+        </div>
+        <div class="file-info">
+            Excel (.xlsx, .xls) oder CSV Datei
+        </div>
+    </div>
+
+    <!-- App Screen -->
+    <div id="appScreen">
+        <div id="stepHeader">
+            Schritt: <span id="currentStep">1</span> / <span id="totalSteps">0</span>
+        </div>
+
+        <div id="mainContent">
+            <div class="pin-display">
+                <div class="pin-label">Von Pin</div>
+                <div class="pin-value" id="fromPin">-</div>
+            </div>
+            <div class="pin-display">
+                <div class="pin-label">Zu Pin</div>
+                <div class="pin-value" id="toPin">-</div>
+            </div>
+        </div>
+
+        <div id="controls">
+            <button id="backBtn">⬅ Schritt zurück</button>
+            <button id="resetBtn">
+                🔄 Zurücksetzen
+                <div id="resetProgress"></div>
+            </button>
+            <button id="homeBtn">🏠 Home</button>
+        </div>
+    </div>
+
+    <!-- Home Confirmation Modal -->
+    <div id="homeModal1" class="modal">
+        <div class="modal-content">
+            <h2>Datei entfernen?</h2>
+            <p>Möchten Sie wirklich die Datei entfernen?</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal('homeModal1')">Abbrechen</button>
+                <button class="btn-confirm" onclick="showSecondModal()">Ja</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="homeModal2" class="modal">
+        <div class="modal-content">
+            <h2>Sind Sie sich sicher?</h2>
+            <p>Diese Aktion kann nicht rückgängig gemacht werden.</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal('homeModal2')">Abbrechen</button>
+                <button class="btn-confirm" onclick="confirmHome()">Ja, entfernen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        let data = [];
+        let currentIndex = 0;
+        let resetTimer = null;
+        let resetProgress = null;
+
+        // Load saved state
+        function loadState() {
+            const savedData = localStorage.getItem('pinData');
+            const savedIndex = localStorage.getItem('currentIndex');
+            
+            if (savedData && savedIndex) {
+                data = JSON.parse(savedData);
+                currentIndex = parseInt(savedIndex);
+                showAppScreen();
+                displayCurrentStep();
+            }
+        }
+
+        // Save state
+        function saveState() {
+            localStorage.setItem('pinData', JSON.stringify(data));
+            localStorage.setItem('currentIndex', currentIndex.toString());
+        }
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const fileData = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(fileData, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+                    // Parse data starting from row 2 (index 1)
+                    data = [];
+                    for (let i = 1; i < jsonData.length; i++) {
+                        if (jsonData[i][0] || jsonData[i][1] || jsonData[i][2]) {
+                            data.push({
+                                schritt: jsonData[i][0] || '',
+                                vonPin: jsonData[i][1] || '',
+                                zuPin: jsonData[i][2] || ''
+                            });
+                        }
+                    }
+
+                    if (data.length === 0) {
+                        alert('Keine Daten gefunden. Bitte überprüfen Sie die Datei.');
+                        return;
+                    }
+
+                    currentIndex = 0;
+                    saveState();
+                    showAppScreen();
+                    displayCurrentStep();
+                } catch (error) {
+                    alert('Fehler beim Lesen der Datei: ' + error.message);
+                }
+            };
+
+            if (file.name.endsWith('.csv')) {
+                reader.readAsText(file);
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    const lines = text.split('\n');
+                    data = [];
+                    
+                    for (let i = 1; i < lines.length; i++) {
+                        const values = lines[i].split(/[,;]/);
+                        if (values[0] || values[1] || values[2]) {
+                            data.push({
+                                schritt: values[0] ? values[0].trim() : '',
+                                vonPin: values[1] ? values[1].trim() : '',
+                                zuPin: values[2] ? values[2].trim() : ''
+                            });
+                        }
+                    }
+
+                    if (data.length === 0) {
+                        alert('Keine Daten gefunden. Bitte überprüfen Sie die Datei.');
+                        return;
+                    }
+
+                    currentIndex = 0;
+                    saveState();
+                    showAppScreen();
+                    displayCurrentStep();
+                };
+            } else {
+                reader.readAsArrayBuffer(file);
+            }
+        });
+
+        function showAppScreen() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'flex';
+        }
+
+        function showStartScreen() {
+            document.getElementById('startScreen').style.display = 'flex';
+            document.getElementById('appScreen').style.display = 'none';
+        }
+
+        function displayCurrentStep() {
+            if (data.length === 0) return;
+
+            const current = data[currentIndex];
+            document.getElementById('currentStep').textContent = currentIndex + 1;
+            document.getElementById('totalSteps').textContent = data.length;
+            document.getElementById('fromPin').textContent = current.vonPin;
+            document.getElementById('toPin').textContent = current.zuPin;
+        }
+
+        // Main content click - next step
+        document.getElementById('mainContent').addEventListener('click', function() {
+            if (currentIndex < data.length - 1) {
+                currentIndex++;
+                saveState();
+                displayCurrentStep();
+            }
+        });
+
+        // Back button
+        document.getElementById('backBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (currentIndex > 0) {
+                currentIndex--;
+                saveState();
+                displayCurrentStep();
+            }
+        });
+
+        // Reset button - hold for 10 seconds
+        document.getElementById('resetBtn').addEventListener('mousedown', startReset);
+        document.getElementById('resetBtn').addEventListener('touchstart', startReset);
+        document.getElementById('resetBtn').addEventListener('mouseup', cancelReset);
+        document.getElementById('resetBtn').addEventListener('touchend', cancelReset);
+        document.getElementById('resetBtn').addEventListener('mouseleave', cancelReset);
+        document.getElementById('resetBtn').addEventListener('touchcancel', cancelReset);
+
+        function startReset(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const btn = document.getElementById('resetBtn');
+            const progress = document.getElementById('resetProgress');
+            btn.classList.add('holding');
+            
+            let width = 0;
+            resetProgress = setInterval(function() {
+                width += 1;
+                progress.style.width = width + '%';
+                
+                if (width >= 100) {
+                    clearInterval(resetProgress);
+                    resetToStart();
+                }
+            }, 100); // 10 seconds = 100 * 100ms
+        }
+
+        function cancelReset(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            if (resetProgress) {
+                clearInterval(resetProgress);
+                resetProgress = null;
+            }
+            
+            const btn = document.getElementById('resetBtn');
+            const progress = document.getElementById('resetProgress');
+            btn.classList.remove('holding');
+            progress.style.width = '0';
+        }
+
+        function resetToStart() {
+            cancelReset();
+            currentIndex = 0;
+            saveState();
+            displayCurrentStep();
+        }
+
+        // Home button
+        document.getElementById('homeBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            showModal('homeModal1');
+        });
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showSecondModal() {
+            closeModal('homeModal1');
+            showModal('homeModal2');
+        }
+
+        function confirmHome() {
+            localStorage.removeItem('pinData');
+            localStorage.removeItem('currentIndex');
+            data = [];
+            currentIndex = 0;
+            closeModal('homeModal2');
+            showStartScreen();
+            document.getElementById('fileInput').value = '';
+        }
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                console.log('Service Worker registered');
+            }).catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+
+        // Load state on startup
+        loadState();
+    </script>
+</body>
+</html>
